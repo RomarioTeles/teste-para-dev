@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.camel.Exchange;
@@ -60,10 +59,10 @@ public class FileProcessor implements Processor{
 			report.setBestSaleTotal(bestSale.getTotal());
 			report.setBestSalesman(bestSale.getSalesmanName());
 			
-			Sale worstSalesman = Collections.min(sales);
-			report.setWorstSalesman(worstSalesman.getSalesmanName());
-			report.setWorstSaleId(worstSalesman.getSaleId());
-			report.setWorstSaleTotal(worstSalesman.getTotal());
+			Sale worstSale = Collections.min(sales);
+			report.setWorstSalesman(worstSale.getSalesmanName());
+			report.setWorstSaleId(worstSale.getSaleId());
+			report.setWorstSaleTotal(worstSale.getTotal());
 			
 			String reportName = "REPORT_FINAL.done.dat"; // ((String) exchange.getIn().getHeader(Exchange.FILE_NAME)).replace(".dat", ".done.dat");
 			
