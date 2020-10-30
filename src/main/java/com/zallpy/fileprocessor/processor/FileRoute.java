@@ -26,7 +26,7 @@ public class FileRoute extends RouteBuilder {
 	}
 	
 	
-	@Scheduled(fixedDelay = 1000)
+	//@Scheduled(fixedDelay = 1000)
 	@Override
 	public void configure() throws Exception {
 		
