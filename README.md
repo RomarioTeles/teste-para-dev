@@ -20,7 +20,7 @@ Por se tratar de uma aplicação feita com spring-boot e maven, use o seguinte c
 
 ``` mvn package spring-boot:run ```
 
-Após feito o deploy, na pasta /home/usuario/data/in ou C:\users\usuario\data\in, basta adicionar os arquivos a serem processados, imediatamente serão processados e movidos para ./done, o arquivo de saída com o relatório final entra-se na pasta /home/usuario/data/out e foi chamado de REPORT_FINAL.done.dat.
+Após feito o deploy, basta adicionar os arquivos a serem processados na pasta **/home/usuario/data/in** ou **C:\users\usuario\data\in**, imediatamente serão processados e movidos para ./done, o arquivo de saída com o relatório final entra-se na pasta /home/usuario/data/out e foi chamado de REPORT_FINAL.done.dat.
 
 ## para verificar a cobertura de testes ##
 
