@@ -10,7 +10,7 @@ public class InvalidLineException extends RuntimeException{
 		super(MessageFormat.format("Invalid line found in the file {0}.", line));
 	}
 	
-	public InvalidLineException(String line, Throwable throwable) {
-		super(MessageFormat.format("Invalid line found in the file {0}.", line), throwable);
+	public InvalidLineException(String message, Throwable throwable) {
+		super(message, throwable);
 	}
 }

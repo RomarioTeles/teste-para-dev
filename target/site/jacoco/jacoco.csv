@@ -1,0 +1,11 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+demo,com.zallpy.fileprocessor.exceptions,InvalidLineException,0,16,0,0,0,4,0,2,0,2
+demo,com.zallpy.fileprocessor,FileProcessorApplication,0,8,0,0,0,3,0,2,0,2
+demo,com.zallpy.fileprocessor.processor,FileProcessor,41,230,3,9,11,47,4,7,1,4
+demo,com.zallpy.fileprocessor.processor,FileRoute,0,51,0,0,0,11,0,5,0,5
+demo,com.zallpy.fileprocessor.processor,FileRoute.new GenericFileFilter() {...},5,6,0,0,1,1,1,1,1,1
+demo,com.zallpy.fileprocessor.dto,Salesman,33,193,8,24,6,7,8,22,1,13
+demo,com.zallpy.fileprocessor.dto,SaleItem,29,179,16,22,0,9,13,20,0,14
+demo,com.zallpy.fileprocessor.dto,Report,53,456,33,39,3,27,26,34,0,24
+demo,com.zallpy.fileprocessor.dto,Sale,34,301,14,26,5,26,12,24,0,16
+demo,com.zallpy.fileprocessor.dto,Client,17,196,5,27,3,13,6,24,1,13

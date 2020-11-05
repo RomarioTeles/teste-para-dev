@@ -2,6 +2,7 @@
 
 Zallpy e Agibank 
 
+
 ## Considerações do desenvolvedor
 
 Este projeto usa a biblioteca do apache camel para criar um observador que monitora a pasta %HOMEPATH%/data/in.
@@ -11,6 +12,28 @@ Sempre que novos arquivos com extenção .dat são adicionados, o observer proce
 * A classe responsável por inicializar o apache camel é a FileRoute.java;
 * A classe reponsável por processar o arquivo da pasta **in** é a FileProcessor.java;
 * No pacote **com.zallpy.fileprocessor.dto** tem todos as classes de negócio utilizadas no processamento das informações;
+
+
+## Instruções de deploy ##
+
+Por se tratar de uma aplicação feita com spring-boot e maven, use o seguinte comando:
+
+``` mvn package spring-boot:run ```
+
+Após feito o deploy, na pasta /home/usuario/data/in ou C:\users\usuario\data\in, basta adicionar os arquivos a serem processados, imediatamente serão processados e movidos para ./done, o arquivo de saída com o relatório final entra-se na pasta /home/usuario/data/out e foi chamado de REPORT_FINAL.done.dat.
+
+## para verificar a cobertura de testes ##
+
+A aplicação utiliza o plugin Jacoco, este é utilizado para realizar metricas de cobertura de testes. 
+
+Para executar a verificação utilize o seguinte comando:
+
+``` mvn verify ```
+
+Será criado um arquivo HTML contendo o relatório dos testes, ao final da execução, na pasta ./target/site/jacoco/index.html
+
+No arquivo pom.xml é possível definir uma serie de configurações ao jacoco, por exemplo o nível aceitável de linhas cobertas. Para a aplicação foi definido 80% de cobertura como aceitável.
+
 
 #### Formato de Saída ####
 

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client {
+public class Client implements Comparable<Client>{
 
 	private String CNPJ;
 	
@@ -30,7 +30,16 @@ public class Client {
 				throw new InvalidLineException(line);
 			}
 		}catch (Exception e) {
-			throw new InvalidLineException(line, e);
+			throw new InvalidLineException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public int compareTo(Client arg0) {
+		try {
+			return this.CNPJ.compareTo(arg0.CNPJ);
+		}catch (Exception e) {
+			return -1;
 		}
 	}
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Sale.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">com.zallpy.fileprocessor.dto</a> &gt; <span class="el_source">Sale.java</span></div><h1>Sale.java</h1><pre class="source lang-java linenums">package com.zallpy.fileprocessor.dto;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.util.StringUtils;
+
+import com.zallpy.fileprocessor.exceptions.InvalidLineException;
+
+import lombok.Data;
+
+<span class="pc bpc" id="L13" title="13 of 38 branches missed.">@Data</span>
+public class Sale implements Comparable&lt;Sale&gt; {
+
+<span class="fc" id="L16">	private Integer saleId;</span>
+	
+<span class="fc" id="L18">	private String salesmanName;</span>
+	
+<span class="fc" id="L20">	private Double total = 0.0D;</span>
+	
+<span class="fc" id="L22">	private List&lt;SaleItem&gt; items = new ArrayList&lt;SaleItem&gt;();</span>
+
+	@Override
+	public int compareTo(Sale arg0) {
+		try {
+<span class="fc" id="L27">			return this.total.compareTo(arg0.total);</span>
+<span class="nc" id="L28">		}catch (Exception e) {</span>
+<span class="nc" id="L29">			return -1;</span>
+		}
+	}
+	
+	public static Sale readLine(String line) {
+<span class="fc" id="L34">		int countSeparator = StringUtils.countOccurrencesOf(line, &quot;ç&quot;);</span>
+		
+		try {
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">			if(countSeparator &gt;= 3) {</span>
+<span class="fc" id="L38">				String[] columns = line.split(&quot;ç&quot;);</span>
+				
+<span class="fc" id="L40">				Sale sale = new Sale();</span>
+<span class="fc" id="L41">				sale.setSaleId(Integer.valueOf(columns[1]));</span>
+<span class="fc" id="L42">				sale.setSalesmanName(columns[3]);</span>
+				
+<span class="fc" id="L44">				String[] items = columns[2].replaceAll(&quot;\\[&quot;, &quot;&quot;).replaceAll(&quot;\\]&quot;, &quot;&quot;).split(&quot;,&quot;);</span>
+				
+<span class="fc" id="L46">				Double[] total = { 0.0D };</span>
+				
+<span class="fc" id="L48">				Arrays.asList(items).forEach(</span>
+					itemData -&gt; {
+<span class="fc" id="L50">						String[] columnsItem = itemData.split(&quot;-&quot;);</span>
+<span class="fc" id="L51">						SaleItem item = new SaleItem();</span>
+<span class="fc" id="L52">						item.setSaleId(sale.getSaleId());</span>
+<span class="fc" id="L53">						item.setId(Integer.valueOf(columnsItem[0].trim()));</span>
+<span class="fc" id="L54">						item.setQuantity(Double.valueOf(columnsItem[1].trim()));</span>
+<span class="fc" id="L55">						item.setPrice(Double.valueOf(columnsItem[2].trim()));</span>
+						
+<span class="fc" id="L57">						total[0] += item.getTotal();</span>
+						
+<span class="fc" id="L59">						sale.items.add(item);</span>
+<span class="fc" id="L60">					}</span>
+				);
+				
+<span class="fc" id="L63">				sale.setTotal(total[0]);</span>
+				
+<span class="fc" id="L65">				return sale;</span>
+			}else {
+<span class="nc" id="L67">				throw new InvalidLineException(line);</span>
+			}
+<span class="nc" id="L69">		}catch (Exception e) {</span>
+<span class="nc" id="L70">			throw new InvalidLineException(line, e);</span>
+		}
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileProcessor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">com.zallpy.fileprocessor.processor</a> &gt; <span class="el_source">FileProcessor.java</span></div><h1>FileProcessor.java</h1><pre class="source lang-java linenums">package com.zallpy.fileprocessor.processor;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+
+import com.zallpy.fileprocessor.dto.Client;
+import com.zallpy.fileprocessor.dto.Report;
+import com.zallpy.fileprocessor.dto.Sale;
+import com.zallpy.fileprocessor.dto.Salesman;
+
+import lombok.extern.slf4j.Slf4j;
+
+<span class="fc" id="L25">@Slf4j</span>
+<span class="fc" id="L26">public class FileProcessor implements Processor{</span>
+	
+<span class="fc" id="L28">	private final String reportName = &quot;REPORT_FINAL.done.dat&quot;; </span>
+	
+	public void process(Exchange exchange) {
+		try {
+<span class="nc" id="L32">			log.info(&quot;Processando arquivo...&quot;);</span>
+			
+<span class="nc" id="L34">			String body = exchange.getIn().getBody(String.class);</span>
+			
+<span class="nc" id="L36">			Report report = process(body);</span>
+			
+<span class="nc" id="L38">			exchange.getMessage().setHeader(Exchange.FILE_NAME, reportName );</span>
+			
+<span class="nc" id="L40">			log.info(&quot;Relatório:\n{}&quot;, report);</span>
+			
+<span class="nc" id="L42">			exchange.getMessage().setBody(report);</span>
+			
+<span class="nc" id="L44">			log.info(&quot;Relatorio foi salvo em: %HOMEPATH%/data/out/&quot;+reportName);</span>
+			
+			
+<span class="nc" id="L47">		} catch (Exception e) {</span>
+<span class="nc" id="L48">			log.error(e.getMessage(), e);</span>
+		}
+<span class="nc" id="L50">	}</span>
+	
+	public Report process(String body) throws IOException {
+<span class="fc" id="L53">		log.info(&quot;Conteudo:\n{}&quot;, body);</span>
+		
+<span class="fc" id="L55">		List&lt;Client&gt; clients = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L56">		List&lt;Salesman&gt; salesmens = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L57">		List&lt;Sale&gt; sales = new ArrayList&lt;&gt;();</span>
+		
+<span class="fc" id="L59">		final List&lt;String&gt; lines = Arrays.asList(body.split(&quot;\\r?\\n&quot;));</span>
+		
+<span class="fc" id="L61">		lines.forEach(line -&gt; {</span>
+			
+<span class="fc bfc" id="L63" title="All 2 branches covered.">			if(line.startsWith(&quot;001&quot;)) {</span>
+<span class="fc" id="L64">				salesmens.add(Salesman.readLine(line));</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">			}else if (line.startsWith(&quot;002&quot;)) {</span>
+<span class="fc" id="L66">				clients.add(Client.readLine(line));</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">			}else if (line.startsWith(&quot;003&quot;)) {</span>
+<span class="fc" id="L68">				sales.add(Sale.readLine(line));</span>
+<span class="fc" id="L69">			}else {</span>
+<span class="nc" id="L70">				log.info(&quot;Invalid format line: {}.&quot;, line);</span>
+			}
+			
+<span class="fc" id="L73">		});</span>
+			
+<span class="fc" id="L75">		Report report = new Report();</span>
+<span class="fc" id="L76">		report.setClients(clients.stream().distinct().collect(Collectors.toList()).size());</span>
+<span class="fc" id="L77">		report.setSalesmens(salesmens.stream().distinct().collect(Collectors.toList()).size());</span>
+		
+<span class="fc" id="L79">		Sale bestSale = Collections.max(sales);</span>
+<span class="fc" id="L80">		report.setBestSaleId(bestSale.getSaleId());</span>
+<span class="fc" id="L81">		report.setBestSaleTotal(bestSale.getTotal());</span>
+<span class="fc" id="L82">		report.setBestSalesman(bestSale.getSalesmanName());</span>
+		
+<span class="fc" id="L84">		Sale worstSale = Collections.min(sales);</span>
+<span class="fc" id="L85">		report.setWorstSalesman(worstSale.getSalesmanName());</span>
+<span class="fc" id="L86">		report.setWorstSaleId(worstSale.getSaleId());</span>
+<span class="fc" id="L87">		report.setWorstSaleTotal(worstSale.getTotal());</span>
+		
+		// Ler valor atual do arquivo 
+		
+<span class="fc" id="L91">		String filename = System.getProperty(&quot;user.home&quot;)+File.separator+&quot;data&quot;+File.separator+&quot;out&quot;+File.separator+reportName;</span>
+<span class="fc" id="L92">		File fileReport = new File(filename);</span>
+		
+		//Compara os dados do arquivo atual com o do relatorio em processamento.
+		
+<span class="fc bfc" id="L96" title="All 2 branches covered.">		if(fileReport.exists()) {</span>
+<span class="fc" id="L97">			List&lt;String&gt; linesReport = Files.readAllLines(Path.of(filename));</span>
+<span class="fc" id="L98">			Report currentReport = Report.readLine(linesReport.get(1));</span>
+			
+<span class="fc" id="L100">			Double bestSaleTotalMax = Math.max(currentReport.getBestSaleTotal(), report.getBestSaleTotal());</span>
+<span class="fc" id="L101">			Double worstSaleTotalMin = Math.min(currentReport.getWorstSaleTotal(), report.getWorstSaleTotal());</span>
+			
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">			if(bestSaleTotalMax.equals(report.getBestSaleTotal())) {</span>
+<span class="fc" id="L104">				currentReport.setBestSaleTotal(report.getBestSaleTotal());</span>
+<span class="fc" id="L105">				currentReport.setBestSaleId(report.getBestSaleId());</span>
+<span class="fc" id="L106">				currentReport.setBestSalesman(report.getBestSalesman());</span>
+			}
+			
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">			if(worstSaleTotalMin.equals(report.getWorstSaleTotal())) {</span>
+<span class="fc" id="L110">				currentReport.setWorstSaleTotal(report.getWorstSaleTotal());</span>
+<span class="fc" id="L111">				currentReport.setWorstSaleId(report.getWorstSaleId());</span>
+<span class="fc" id="L112">				currentReport.setWorstSalesman(report.getWorstSalesman());</span>
+			}
+			
+<span class="fc" id="L115">			currentReport.incrementClients(report.getClients());</span>
+<span class="fc" id="L116">			currentReport.incrementSalesmens(report.getSalesmens());</span>
+			
+<span class="fc" id="L118">			report = currentReport;</span>
+		}
+		
+<span class="fc" id="L121">		return report;</span>
+		
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

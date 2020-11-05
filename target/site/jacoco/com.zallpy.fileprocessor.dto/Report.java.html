@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Report.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">com.zallpy.fileprocessor.dto</a> &gt; <span class="el_source">Report.java</span></div><h1>Report.java</h1><pre class="source lang-java linenums">package com.zallpy.fileprocessor.dto;
+
+import java.text.MessageFormat;
+
+import org.springframework.util.StringUtils;
+
+import com.zallpy.fileprocessor.exceptions.InvalidLineException;
+
+import lombok.Data;
+
+<span class="pc bpc" id="L11" title="32 of 70 branches missed.">@Data</span>
+public class Report {
+
+<span class="fc" id="L14">	private Integer clients = 0;</span>
+
+<span class="fc" id="L16">	private Integer salesmens = 0;</span>
+
+<span class="fc" id="L18">	private Integer bestSaleId;</span>
+
+<span class="fc" id="L20">	private Integer worstSaleId;</span>
+
+<span class="fc" id="L22">	private String bestSalesman;</span>
+	
+<span class="fc" id="L24">	private String worstSalesman;</span>
+
+<span class="fc" id="L26">	private Double worstSaleTotal = 0.0D;</span>
+
+<span class="fc" id="L28">	private Double bestSaleTotal = 0.0D;</span>
+
+	@Override
+	public String toString() {
+<span class="fc" id="L32">		return MessageFormat.format(</span>
+				&quot;Total Clients ç Total Salesman ç Best Sale Id ç Best Sale total ç Worst Sale Id ç Worst Sale Total ç Best Salesman Name ç Worst Salesman Name\n{0}ç{1}ç{2}ç{3}ç{4}ç{5}ç{6}ç{7}&quot;,
+				clients, salesmens, bestSaleId, bestSaleTotal, worstSaleId, worstSaleTotal, bestSalesman, worstSalesman);
+	}
+	
+	public void incrementClients(int sum) {
+<span class="fc" id="L38">		clients += sum;</span>
+<span class="fc" id="L39">	}</span>
+	
+	public void incrementSalesmens(int sum) {
+<span class="fc" id="L42">		salesmens += sum;</span>
+<span class="fc" id="L43">	}</span>
+
+	public static Report readLine(String line) {
+<span class="fc" id="L46">		int countSeparator = StringUtils.countOccurrencesOf(line, &quot;ç&quot;);</span>
+
+		try {
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">			if (countSeparator &gt;= 6) {</span>
+<span class="fc" id="L50">				String[] columns = line.split(&quot;ç&quot;);</span>
+
+<span class="fc" id="L52">				Report sale = new Report();</span>
+<span class="fc" id="L53">				sale.setClients(Integer.valueOf(columns[0].trim()));</span>
+<span class="fc" id="L54">				sale.setSalesmens(Integer.valueOf(columns[1].trim()));</span>
+<span class="fc" id="L55">				sale.setBestSaleId(Integer.valueOf(columns[2].trim()));</span>
+<span class="fc" id="L56">				sale.setBestSaleTotal(Double.valueOf(columns[3].trim().replace(&quot;.&quot;, &quot;&quot;).replace(&quot;,&quot;, &quot;.&quot;)));</span>
+<span class="fc" id="L57">				sale.setWorstSaleId(Integer.valueOf(columns[4].trim()));</span>
+<span class="fc" id="L58">				sale.setWorstSaleTotal(Double.valueOf(columns[5].trim().replace(&quot;.&quot;, &quot;&quot;).replace(&quot;,&quot;, &quot;.&quot;)));</span>
+<span class="fc" id="L59">				sale.setBestSalesman(columns[6]);</span>
+<span class="fc" id="L60">				sale.setWorstSalesman(columns[7]);</span>
+				
+<span class="fc" id="L62">				return sale;</span>
+			} else {
+<span class="nc" id="L64">				throw new InvalidLineException(line);</span>
+			}
+<span class="nc" id="L66">		} catch (Exception e) {</span>
+<span class="nc" id="L67">			throw new InvalidLineException(line, e);</span>
+		}
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

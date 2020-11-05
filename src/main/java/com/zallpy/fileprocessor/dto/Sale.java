@@ -23,7 +23,11 @@ public class Sale implements Comparable<Sale> {
 
 	@Override
 	public int compareTo(Sale arg0) {
-		return this.total.compareTo(arg0.total);
+		try {
+			return this.total.compareTo(arg0.total);
+		}catch (Exception e) {
+			return -1;
+		}
 	}
 	
 	public static Sale readLine(String line) {

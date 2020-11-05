@@ -7,7 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 class FileProcessorApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void test() {
+		FileProcessorApplication.main(new String[] {
+			"--spring.profiles.active=test",
+			"--spring.main.web-environment=false",
+			"--logging.level.root=OFF",
+        });
 	}
 
 }

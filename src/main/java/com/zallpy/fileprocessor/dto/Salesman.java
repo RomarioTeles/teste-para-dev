@@ -6,10 +6,12 @@ import com.zallpy.fileprocessor.exceptions.InvalidLineException;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class Salesman {
+@NoArgsConstructor
+public class Salesman implements Comparable<Salesman>{
 
 	private String name;
 	
@@ -23,12 +25,21 @@ public class Salesman {
 			
 			if(countSeparator >= 3) {
 				String[] columns = line.split("ç");
-				return new Salesman(columns[1], columns[2], Double.valueOf(columns[3]));
+				return new Salesman(columns[2], columns[1], Double.valueOf(columns[3]));
 			}else {
 				throw new InvalidLineException(line);
 			}
 		}catch (Exception e) {
 			throw new InvalidLineException(line, e);
+		}
+	}
+
+	@Override
+	public int compareTo(Salesman arg0) {
+		try {
+			return this.CPF.compareTo(arg0.CPF);
+		}catch (Exception e) {
+			return -1;
 		}
 	}
 }

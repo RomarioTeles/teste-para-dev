@@ -7,7 +7,6 @@ import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.component.file.GenericFileFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,8 +34,15 @@ public class FileRoute extends RouteBuilder {
 		
 		log.info("Configurando observer. Pasta de origem: "+ in +". Pasta de destino: "+ out +"." );
 		
-		from(in).process(new FileProcessor()).to(out);
+		configure(in, out);
 		
+	}
+	
+	public void configure(String in, String out) {
+		
+		log.info("Configurando observer. Pasta de origem: "+ in +". Pasta de destino: "+ out +"." );
+		
+		from(in).process(new FileProcessor()).to(out);
 	}
 	
 }
